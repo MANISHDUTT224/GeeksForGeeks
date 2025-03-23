@@ -11,18 +11,19 @@ class Solution {
   public:
     int floorSqrt(int n) {
         // Your code goes here
-        int i=1,j=n;
+        int i=1,j=n,ans=-1;
         while(i<=j){
             int mid=(i+j)/2;
-            long long val=mid*mid;
-            if(val<=(long long)n){
+            long val=mid*mid;
+            if(val<=(long)n){
+                ans=mid;
                 i=mid+1;
             }
             else{
                 j=mid-1;
             }
         }
-        return j;
+        return ans;
     }
 };
 
