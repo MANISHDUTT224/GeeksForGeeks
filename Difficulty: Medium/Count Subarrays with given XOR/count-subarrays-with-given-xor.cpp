@@ -9,9 +9,8 @@ class Solution {
         for(int i=0;i<arr.size();i++){
             xr^=arr[i];
             int x=xr^k;
-            cnt+=mp[x];
-            mp[xr]++;
-            
+             cnt+=mp[x];
+             mp[xr]++;
         }
         return cnt;
     }
