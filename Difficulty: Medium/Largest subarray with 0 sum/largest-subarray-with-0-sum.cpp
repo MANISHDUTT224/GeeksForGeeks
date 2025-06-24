@@ -1,21 +1,12 @@
-//{ Driver Code Starts
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
-
 /*You are required to complete this function*/
 
 class Solution {
   public:
     int maxLen(vector<int>& arr) {
         // code here
-        int maxlen=0;
-        int n=arr.size();
+        int len=0,maxlen=0,sum=0;
         map<int,int>mp;
-        int sum=0;
-        for(int i=0;i<n;i++){
+        for(int i=0;i<arr.size();i++){
             sum+=arr[i];
             if(sum==0){
                 maxlen=max(maxlen,i+1);
@@ -24,39 +15,9 @@ class Solution {
                 maxlen=max(maxlen,i-mp[sum]);
             }
             else{
-                mp[sum]=i;
+            mp[sum]=i;
             }
         }
         return maxlen;
     }
 };
-
-
-
-//{ Driver Code Starts.
-
-int main() {
-    int t;
-    cin >> t;
-    cin.ignore(); // to ignore the newline after the integer input
-    while (t--) {
-        int n;
-        vector<int> a;
-        string input;
-
-        // Input format: first number n followed by the array elements
-        getline(cin, input);
-        stringstream ss(input);
-        int num;
-        while (ss >> num)
-            a.push_back(num);
-
-        Solution obj;
-        cout << obj.maxLen(a) << endl;
-        cout << "~\n";
-    }
-
-    return 0;
-}
-
-// } Driver Code Ends
