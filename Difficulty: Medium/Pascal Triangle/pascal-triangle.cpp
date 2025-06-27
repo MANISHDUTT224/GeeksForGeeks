@@ -10,15 +10,20 @@ class Solution {
   public:
     vector<int> nthRowOfPascalTriangle(int n) {
         // code here
+        vector<vector<int>>res;
+        for(int i=1;i<=n;i++){
+            vector<int>arr;
+            int temp=1;
+            arr.push_back(temp);
+            for(int j=1;j<i;j++){
+                temp*=(i-j);
+                temp/=j;
+                arr.push_back(temp);
+            }
+            res.push_back(arr);
         
-        n-=1;
-        vector<int>row;
-        long long val=1;
-        for(int k=0;k<=n;k++){
-            row.push_back(val);
-            val=val*(n-k)/(k+1);
         }
-        return row;
+        return res[n-1];
     }
 };
 
