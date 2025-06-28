@@ -1,30 +1,30 @@
 class Solution {
   public:
-    bool check(vector<int>&arr,int k,int mid){
-        int s=0;
-        for(int i=0;i<arr.size();i++){
-            int rem=arr[i]%mid;
-            s+=arr[i]/mid;
-            if(rem!=0){
-                s++;
-            }
-        }
-        return s<=k;
-    }
+     int findHours(vector<int>&arr,int mid){
+         int total=0;
+         for(int pile:arr){
+             total+=ceil((double)pile/(double)mid);
+         }
+         return total;
+     }
     int kokoEat(vector<int>& arr, int k) {
         // Code here
-        int low=1,high=*max_element(arr.begin(),arr.end());
-        int res=0;
-        while(low<=high){
-            int mid=low+(high-low)/2;
-            if(check(arr,k,mid)){
-                res=mid;
-                high=mid-1;
+        int i=1,j=*max_element(arr.begin(),arr.end());
+        sort(arr.begin(),arr.end());
+        int ans=-1;
+        while(i<=j){
+            int mid=(i+j)/2;
+            int tothours=findHours(arr,mid);
+            if(tothours>k){
+                
+                i=mid+1;
             }
             else{
-                low=mid+1;
+                ans=mid;
+                j=mid-1;
             }
         }
-        return res;
+        return ans;
+        
     }
 };
