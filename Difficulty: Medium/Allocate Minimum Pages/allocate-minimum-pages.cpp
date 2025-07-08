@@ -1,81 +1,37 @@
-//{ Driver Code Starts
-// Initial function template for C++
-
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
 class Solution {
   public:
-    bool ispossible(vector<int> &arr,int k,int mid){
-        int sum=0,cnt=1;
+    long findPages(vector<int>&arr,int mid,int k){
+        long pages=0,student=1;
         for(int i=0;i<arr.size();i++){
-            if(sum+arr[i]>mid){
-                sum=arr[i];
-                cnt++;
+            if(arr[i]+pages>mid){
+                pages=arr[i];
+                student++;
             }
             else{
-                sum+=arr[i];
+                pages+=arr[i];
             }
         }
-        return cnt<=k;
+        return student;
     }
     int findPages(vector<int> &arr, int k) {
         // code here
+        int i=*max_element(arr.begin(),arr.end()),j=accumulate(arr.begin(),arr.end(),0);
+        int ans=-1;
         if(k>arr.size()){
             return -1;
         }
-        
-        int low=*max_element(arr.begin(),arr.end());
-        int high=accumulate(arr.begin(),arr.end(),0);
-        int ans=-1;
-        while(low<=high){
-            int mid=(low+high)/2;
-            if(ispossible(arr,k,mid)){
-                ans=mid;
-                high=mid-1;
+        while(i<=j){
+            int mid=(i+j)/2;
+            long total=findPages(arr,mid,k);
+            if(total>k){
+                i=mid+1;
             }
             else{
-                low=mid+1;
+                ans=mid;
+                j=mid-1;
             }
+            
         }
         return ans;
     }
 };
-
-//{ Driver Code Starts.
-
-int main() {
-    int test_case;
-    cin >> test_case;
-    cin.ignore();
-    while (test_case--) {
-
-        int d;
-        vector<int> arr, brr, crr;
-        string input;
-        getline(cin, input);
-        stringstream ss(input);
-        int number;
-        while (ss >> number) {
-            arr.push_back(number);
-        }
-        getline(cin, input);
-        ss.clear();
-        ss.str(input);
-        while (ss >> number) {
-            crr.push_back(number);
-        }
-        d = crr[0];
-        int n = arr.size();
-        Solution ob;
-        int ans = ob.findPages(arr, d);
-        cout << ans << endl;
-
-        cout << "~"
-             << "\n";
-    }
-    return 0;
-}
-// } Driver Code Ends
