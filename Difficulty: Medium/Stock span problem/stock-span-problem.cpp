@@ -9,11 +9,10 @@ class Solution {
                 st.pop();
             }
             if(st.empty()){
-            ans.push_back(i+1);
+                ans.push_back(i+1);
             }
             else{
-            ans.push_back(i-st.top());
-            
+                ans.push_back(i-st.top());
             }
             st.push(i);
         }
