@@ -1,72 +1,49 @@
-//{ Driver Code Starts
-// Initial Template for C++
-
-#include <bits/stdc++.h>
-using namespace std;
-
-
-// } Driver Code Ends
-
-
 class Solution {
   public:
     string decodedString(string &s) {
         // code here
-        stack<char>st;
-        for(int i=0;i<s.size();i++){
-            if(s[i]!=']'){
-               st.push(s[i]); 
-            }
-            else{
-                string word;
-                while(!st.empty() && st.top()!='['){
-                    word.push_back(st.top());
+        stack<string>st;
+        int i=s.size()-1;
+        while(i>=0){
+            if(s[i]=='['){
+                string cur="";
+                while(st.top()!="]"){
+                    cur+=st.top();
                     st.pop();
                 }
-                reverse(word.begin(),word.end());
                 st.pop();
-                string k;
-                while(!st.empty() && isdigit(st.top())){
-                    k.push_back(st.top());
+                
+                string mkp="";
+                while(!st.empty() && (st.top()!="]")){
+                    mkp+=st.top();
                     st.pop();
                 }
-                reverse(k.begin(),k.end());
-                int num=stoi(k);
-                string repeated;
-                for(int j=0;j<num;j++){
-                    repeated.append(word);
+                i--;
+                string p;
+                while(i>=0 && (s[i]>='0' && s[i]<='9')){
+                    p.push_back(s[i]);
+                    i--;
                 }
-                for(char c:repeated){
-                    st.push(c);
-                }
-            }
+                 reverse(p.begin(), p.end());
+              
+              int t = stoi(p);
+              string newTemp = "";
+              for(int k=0;k<t;k++){
+                  newTemp += cur;
+              }
+              
+              st.push(newTemp + mkp);
+              
+          }
+          else{
+              string p = "";
+              p += s[i];
+              st.push(p);
+              i--;
+          }
+          
         }
-        string ans;
-        while(!st.empty()){
-            ans.push_back(st.top());
-            st.pop();
-        }
-        reverse(ans.begin(),ans.end());
-        return ans;
+        
+        return st.top();
     }
 };
-
-
-//{ Driver Code Starts.
-
-int main() {
-    int t;
-    cin >> t;
-    while (t--) {
-        string s;
-        cin >> s;
-
-        Solution ob;
-        cout << ob.decodedString(s) << "\n";
-
-        cout << "~"
-             << "\n";
-    }
-    return 0;
-}
-// } Driver Code Ends
