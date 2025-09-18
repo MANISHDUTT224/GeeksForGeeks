@@ -1,25 +1,28 @@
 class Solution {
   public:
-    vector<int> nextLargerElement(vector<int> &arr) {
+    vector<int> nextGreater(vector<int> &arr) {
         // code here
-       vector<int>tmp=arr;
-        int n=arr.size();
-        for(int i=0; i<n-1; i++){
-            tmp.push_back(arr[i]);
+        int idx = 0;
+        int n = arr.size();
+        
+        for(int i = 0;i<n;i++){
+            if(arr[i]>arr[idx]){
+                idx = i;
+            }
         }
         
-        stack<int>st;
-        int sz=tmp.size();
-        vector<int>ans(n, -1);
+        vector<int> sol(arr.size(),-1);
+        stack<int> st;
         
-        for(int i=sz-1; i>=0; i--){
-            while(!st.empty() && st.top()<=tmp[i]){
+   
+        for(int i = idx+1;i<=idx+n;i++){
+            while((!st.empty()) and (arr[i%n]>arr[st.top()])){
+                sol[st.top()] = arr[i%n];
                 st.pop();
             }
-            if(i<n) ans[i]=st.empty()?-1:st.top();
-            st.push(tmp[i]);
+            st.push(i%n);
         }
         
-        return ans;
+        return sol;
     }
 };
