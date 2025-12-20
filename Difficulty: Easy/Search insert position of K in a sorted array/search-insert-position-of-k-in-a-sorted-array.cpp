@@ -1,21 +1,15 @@
-// User function Template for C++
-
 class Solution {
   public:
-    int searchInsertK(vector<int> Arr, int N, int k) {
+    int searchInsertK(vector<int> &arr, int k) {
         // code here
-        int i=0,j=N-1;
-        int ans=N;
-        while(i<=j){
-            int mid=i+(j-i)/2;
-            if(Arr[mid]>=k){
-                ans=mid;
-                j=mid-1;
+         for(int i = 0;i<arr.size();i++){
+            if(arr[i] == k){
+                return i;
             }
-            else{
-                i=mid+1;
+            if(k < arr[i]){
+                return i;
             }
         }
-        return ans;
+        return arr.size();
     }
 };
