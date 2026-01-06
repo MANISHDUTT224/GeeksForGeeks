@@ -2,17 +2,12 @@ class Solution {
   public:
     int maxSubarraySum(vector<int>& arr, int k) {
         // code here
-         int sum=0;
-        for(int itr =0;itr<k;itr++){
-            sum+=arr[itr];
+         int n = arr.size(), ans = 0;
+        for(int i = 0, x = 0; i < n; i++) {
+            x += arr[i];
+            if(i - k >= 0) x -= arr[i - k];
+            ans = max(ans, x);
         }
-        int maxi = sum;
-        for(int itr=k,i=0;itr<arr.size();itr++,i++){
-            sum+=arr[itr];
-            sum-=arr[i];
-            maxi=max(maxi,sum);
-        }
-        
-        return maxi;
+        return ans;
     }
 };
