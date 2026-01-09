@@ -2,21 +2,23 @@ class Solution {
   public:
     int countAtMostK(vector<int> &arr, int k) {
         // code here
-         int res = 0;
-        unordered_map<int, int> mp;
-        int start = 0;
-        for(int i = 0; i < arr.size(); i++){
-            int currEle = arr[i];
-            mp[currEle]++;
-            while(mp.size() > k){
-                mp[arr[start]]--;
-                if(mp[arr[start]] == 0){
-                    mp.erase(arr[start]);
-                }
-                start++;
+         unordered_map<int,int>mp;
+        int i = 0,j =  0,n = arr.size();
+        int ans = 0;
+        while(i<n && j<n)
+        {
+            mp[arr[j]]++;
+            while(mp.size()>k)
+            {
+                mp[arr[i]]--;
+                if(mp[arr[i]] == 0)
+                mp.erase(arr[i]);
+                i++;
+                
             }
-            res += i - start + 1;
+            ans += j-i+1;
+            j++;
         }
-        return res;
+        return ans;
     }
 };
