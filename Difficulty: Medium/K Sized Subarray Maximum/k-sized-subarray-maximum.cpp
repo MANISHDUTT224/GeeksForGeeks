@@ -2,18 +2,32 @@ class Solution {
   public:
     vector<int> maxOfSubarrays(vector<int>& arr, int k) {
         // code here
-        priority_queue<pair<int,int>>pq;
-        vector<int>res;
-        for(int i=0;i<arr.size();i++){
-            while(!pq.empty() && pq.top().second<=i-k){
-                pq.pop();
-            }
-            pq.push({arr[i],i});
-            if(i>=k-1){
-                res.push_back(pq.top().first);
-            }
-        }
-        return res;
+        int n = arr.size();
+        deque<int> dq;
+        vector<int> ans;
         
+        // first k-sized window
+        for (int i = 0; i < k; i++) {
+            while (!dq.empty() && arr[dq.back()] < arr[i])
+                dq.pop_back();
+            
+            dq.push_back(i);
+        }
+        ans.push_back(arr[dq.front()]);
+        
+        // remaining elements
+        for (int i = k; i < n; i++) {
+            if (!dq.empty() && i-dq.front() >= k)
+                dq.pop_front();
+                
+            while (!dq.empty() && arr[dq.back()] < arr[i])
+                dq.pop_back();
+            
+            dq.push_back(i);
+            
+            ans.push_back(arr[dq.front()]);
+        }
+        
+        return ans;
     }
 };
