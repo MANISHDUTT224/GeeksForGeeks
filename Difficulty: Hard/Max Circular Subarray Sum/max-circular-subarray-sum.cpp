@@ -1,36 +1,27 @@
 class Solution {
   public:
-     int maxKadanes(vector<int>&arr){
-         int sum=0,maxsum=INT_MIN;
-         for(int i=0;i<arr.size();i++){
-             sum+=arr[i];
-             maxsum=max(maxsum,sum);
-             if(sum<0){
-                 sum=0;
-             }
-         }
-         return maxsum;
-     }
-     
-     int minKadanes(vector<int>&arr){
-         int sum=0,minsum=INT_MAX;
-         for(int i=0;i<arr.size();i++){
-             sum+=arr[i];
-             minsum=min(minsum,sum);
-             if(sum>0){
-                 sum=0;
-             }
-         }
-         return minsum;
-     }
     int maxCircularSum(vector<int> &arr) {
         // code here
-        int maxsum=maxKadanes(arr);
-        int minsum=minKadanes(arr);
-        int total=accumulate(arr.begin(),arr.end(),0);
-        if(maxsum<0){
-            return maxsum;
-        }
-        return max(maxsum,total-minsum);
+          int n = arr.size();
+           int mini = INT_MAX, minsum = 0;
+           int maxi = INT_MIN, maxsum = 0;
+           int total =0;
+           for(int i:arr){
+                    total+=i;
+                    minsum+=i;
+                    maxsum+=i;
+                    mini = min(mini, minsum);
+                    maxi = max(maxi, maxsum);
+                    if(minsum>0){
+                         minsum=0;
+                    }
+                    if(maxsum<0){
+                          maxsum=0;
+                    }
+                    
+           }
+          if(maxi<0) return maxi;
+           
+           return max(maxi, total-mini);
     }
 };
