@@ -1,28 +1,31 @@
 class Solution {
   public:
-    long long getCost(vector<int>& heights, vector<int>& cost,int target) {
-        // code here
-         long long total = 0;
-        for (int i = 0; i < heights.size(); ++i)
-            total += 1LL * abs(heights[i] - target) * cost[i];
-        return total;
-    }
-
-    int minCost(vector<int>& heights, vector<int>& cost) {
-        int low = *min_element(heights.begin(), heights.end());
-        int high = *max_element(heights.begin(), heights.end());
-        long long ans = LLONG_MAX;
-
-        while (low <= high) {
-            int mid = (low + high) / 2;
-            long long cost1 = getCost(heights, cost, mid);
-            long long cost2 = getCost(heights, cost, mid + 1);
-            ans = min(cost1, cost2);
-
-            if (cost1 < cost2) high = mid - 1;
-            else low = mid + 1;
+     int getCost(vector<int>& heights, vector<int>& cost, int h){
+        int cst = 0;
+        for(int i = 0;i<heights.size();i++){
+            cst += cost[i]*(abs(heights[i] - h));
         }
-
-        return (int)ans;
+        return cst;
+    }
+    int minCost(vector<int>& heights, vector<int>& cost) {
+        int l = 1, r = 1e4+1, mincost = 0;
+        while(l<=r){
+            int m = l+(r-l)/2;
+            
+            int prev = getCost(heights, cost, m-1);
+            int curr = getCost(heights, cost, m);
+            int next = getCost(heights, cost, m+1);
+            
+            if(prev>=curr and curr<=next){
+                return curr;
+            }
+            if(prev>=curr and curr>=next){
+                l = m+1;
+            }
+            else{
+                r = m-1;
+            }
+        }
+        return -1;
     }
 };
