@@ -1,42 +1,43 @@
 class Solution {
   public:
-    bool check(int mid, vector<int>& arr, int k, int w) {
-        int n = arr.size();
-        vector<long long> mp(n + 1, 0);
-    
-        long long cnt = 0, sum = 0;
-        for (int i = 0; i < n; ++i) {
-            sum += mp[i];
-            if (arr[i] + sum < mid) {
-                long long diff = 1LL * mid - (arr[i] + sum);
-                cnt += diff;
-                if (cnt > k) return false;
-                mp[i] += diff;
-                sum += diff;
-                if (i + w < n) mp[i + w] -= diff;
+     bool check(vector<int>& arr, int k, int w, long long m){
+        vector<long long> carry(arr.size(), 0);
+        long long val = 0;
+
+        for(int i = 0; i < arr.size(); i++){
+            if(i != 0)
+                carry[i] += carry[i-1];
+
+            long long cur = (long long)arr[i] + carry[i];
+
+            if(cur >= m)
+                continue;
+            else{
+                long long d = m - cur;
+                val += d;
+                carry[i] += d;
+                if(i + w < arr.size())
+                    carry[i + w] -= d;
             }
         }
-    
-        return true;
+        return val <= k;
     }
-  
+
     int maxMinHeight(vector<int> &arr, int k, int w) {
-        int n = arr.size();
-        
-        int l = *min_element(arr.begin(), arr.end());
-        int r = l + k;
-        int ans = -1;
-        
-        while(l <= r){
-            int mid = l + (r-l)/2;
-            
-            if(check(mid, arr, k, w)){
+        long long ans = 0;
+        long long low = *min_element(arr.begin(), arr.end());
+        long long high = 1e9;
+
+        while(low <= high){
+            long long mid = low + (high - low) / 2;
+
+            if(check(arr, k, w, mid)){
+                low = mid + 1;
                 ans = mid;
-                l = mid + 1;
+            } else {
+                high = mid - 1;
             }
-            else r = mid - 1;
         }
-        
-        return ans;
+        return (int)ans;
     }
 };
