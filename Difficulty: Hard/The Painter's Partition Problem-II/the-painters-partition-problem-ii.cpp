@@ -1,42 +1,36 @@
-// User function template for C++
-
 class Solution {
   public:
-    bool Possible(vector<int>&arr,int mid,int k){
-        int painters=1,sm=0;
-        for(int i=0;i<arr.size();i++){
-            if(arr[i]>mid){
-                return false;
+     bool canAllBoardsBePainted(int maxTime, int k, vector<int> &arr){
+        int painters = 1, curTime = arr[0];
+        for(int i=1;i<arr.size();i++){
+            if(curTime+arr[i]<=maxTime){
+                curTime +=arr[i];
             }
-            if(sm+arr[i]>mid){
-                sm=arr[i];
-                painters++;
-            }
-            
             else{
-                
-                sm+=arr[i];
+                painters++;
+                curTime = arr[i];
             }
+            if(painters>k)
+                return false;
         }
-        return painters<=k;
+        return painters<=k; //true
     }
+  public:
     int minTime(vector<int>& arr, int k) {
         // code here
-        int n=arr.size();
-        long left=*max_element(arr.begin(),arr.end());
-        long right=accumulate(arr.begin(),arr.end(),0);
-        int ans=-1;
-        while(left<=right){
-            int mid=(left+right)/2;
-            if(Possible(arr,mid,k)){
-                ans=mid;
-                right=mid-1;
+        int low = *max_element(arr.begin(), arr.end());
+        int high = accumulate(arr.begin(), arr.end(), 0);
+        
+        while(low<=high){
+            int mid = low + (high - low)/2;
+            
+            if(canAllBoardsBePainted(mid, k, arr)){
+                high = mid - 1;
             }
-            else{
-                left=mid+1;
-            }
+            else
+                low = mid + 1;
         }
-        return ans;
-        // return minimum time
+        
+        return low;
     }
 };
