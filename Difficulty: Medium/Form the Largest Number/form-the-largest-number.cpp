@@ -1,22 +1,20 @@
 class Solution {
   public:
+     static bool compare(int a, int b){
+        string s1 = to_string(a);
+        string s2 = to_string(b);
+        
+        return s1 + s2 > s2 + s1;
+    }
+  
     string findLargest(vector<int> &arr) {
         // code here
-         sort(arr.begin(), arr.end(),[](int&a, int& b){
-            string x = to_string(a); 
-            string y = to_string(b); 
-            
-            return x + y > y + x;
-        });
+        sort(arr.begin(), arr.end(), compare);
+        string ans = "";
         
-        if (!arr.empty() && arr[0] == 0) return "0";
-        
-        string ans ;
-        
-        for(auto i : arr){
-            ans += to_string(i);
+        for(auto &x : arr){
+            ans += to_string(x);
         }
-        
-        return ans;
+        return ans[0] == '0' ? "0" : ans;
     }
 };
