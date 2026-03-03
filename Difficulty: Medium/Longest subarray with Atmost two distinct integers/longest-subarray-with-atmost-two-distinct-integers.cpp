@@ -2,28 +2,33 @@ class Solution {
   public:
     int totalElements(vector<int> &arr) {
         // code here
-        int window=0,streak=0,curr=0,prev=0,ans=0;
-        for(int i=0;i<arr.size();i++){
-            if(arr[i]==curr){
-                window++;
-                streak++;
+         int n= arr.size();
+        int l = 0;
+        int r = 0;
+        unordered_map<int,int> mp;
+        int maxi =0;
+        while(r<arr.size())
+        {
+            mp[arr[r]]++;
+            if(mp.size() <= 2)
+            {
+                maxi = max(r-l+1,maxi);
             }
-            else if(arr[i]==prev){
-                window++;
-                streak=1;
-                prev=curr;
+
+            while(mp.size() > 2)
+            {
+                mp[arr[l]]--;
+                if(mp[arr[l]] == 0 )
+                {
+                    mp.erase(arr[l]);
+                }
+                l++;
             }
-            else{
-                window=streak+1;
-                streak=1;
-                prev=curr;
-            }
-            if(window>ans){
-                ans=window;
-            }
-            curr=arr[i];
+
+            r++;
         }
-        return ans;
+        
+        return maxi;
         
     }
 };
