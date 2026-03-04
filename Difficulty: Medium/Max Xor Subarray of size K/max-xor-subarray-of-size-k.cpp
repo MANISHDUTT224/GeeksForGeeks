@@ -2,18 +2,19 @@ class Solution {
   public:
     int maxSubarrayXOR(vector<int>& arr, int k) {
         // code here
-        int s=0,e=0;
-        int sum=0,mx=INT_MIN;
-        while(e<arr.size())
+        int xorval = 0, i=0;
+        for(i=0; i<k; i++)
         {
-             sum^=arr[e];
-             if(e-s+1==k)
-             {
-                 mx=max(mx,sum);
-                 sum^=arr[s++];
-             }
-             e++;
+            xorval^=arr[i];
         }
-        return mx;
+        
+        int ans = xorval;
+        
+        for(i=k; i<arr.size(); i++)
+        {
+            xorval^=(arr[i-k]^arr[i]);
+            ans = max(ans, xorval);
+        }
+        return ans;
     }
 };
