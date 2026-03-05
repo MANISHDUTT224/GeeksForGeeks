@@ -2,26 +2,43 @@ class Solution {
   public:
     int longestKSubstr(string &s, int k) {
         // code here
-       vector <int> freq(26, 0);
-        int cnt = 0;
-        int n = s.length();
-        int i = 0, j = 0;
-        int ans = -1;
+         int i =0 ;
+        int j =0 ;
+        unordered_map<char , int>m ;
+        int maximum = INT_MIN ;
         
-        while(j < n){
-            if(freq[s[j] - 'a'] == 0) cnt++;
-            freq[s[j] - 'a']++;
+        while(j < s.length()){
             
-            if(cnt == k) ans = max(ans, j-i+1);
-            
-            while(i < j && cnt > k){
-                freq[s[i] - 'a']--;
-                if(freq[s[i] - 'a'] == 0) cnt--;
-                i++;
+            if(m.find(s[j]) == m.end()){
+                m[s[j]] = 1 ;
+            }else{
+                m[s[j]]++ ;
             }
-            j++;
+            
+            if(m.size() < k){
+                j++ ;
+            }
+            
+            else if(m.size() == k){
+                
+                maximum = max(maximum , j-i+1) ;  //ans cal 
+                 j++ ;
+            }
+            
+            else if (m.size() > k){
+                while(m.size() > k){
+                    m[s[i]] -- ;     //remove cal of i
+                    
+                    if(m[s[i]] == 0){
+                        m.erase(s[i]) ;
+                    }
+                    i++ ;
+                }
+                j++ ;
+            }
+            
         }
         
-        return ans;
+        return m.size() < k  ? -1 : maximum ;
     }
 };
