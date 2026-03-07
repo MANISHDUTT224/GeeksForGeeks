@@ -1,17 +1,25 @@
 class Solution {
   public:
-     int noOfWays(int m, int n, int x) {
-        vector<vector<int>>dp(n+1,vector<int>(x+1,0));
-        dp[n][0]=1;
-        for(int i=n-1;i>=0;i--){
-            for(int tar=0;tar<=x;tar++){
-                int sum=0;
-                for(int j=1;j<=m;j++){
-                    if(j<=tar) sum+=dp[i+1][tar-j];
-                    }
-                dp[i][tar]=sum;
+    int countWays(int dice, int target, const int& faces, const int& totalDices, vector<vector<int>>& dp){
+        if(dice == totalDices){
+            return(target == 0) ? 1 : 0;
+        }
+        if(dp[dice][target] != -1){
+            return dp[dice][target];
+        }
+        int ways = 0;
+        for(int i = 1; i <= faces; i++){
+            if(i <= target){
+                ways += countWays(dice+1, target - i, faces, totalDices, dp);
             }
         }
-        return dp[0][x];   
-     }
+        return dp[dice][target] = ways;
+    }
+    int noOfWays(int m, int n, int x) {
+        vector<vector<int>> dp(n, vector<int>(x+1, -1));
+        countWays(0, x, m, n, dp);
+        return dp[0][x];
+        // code here
+        
+    }
 };
