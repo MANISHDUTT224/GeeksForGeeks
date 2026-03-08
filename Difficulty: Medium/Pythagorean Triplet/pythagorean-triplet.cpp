@@ -1,21 +1,18 @@
 class Solution {
   public:
     bool pythagoreanTriplet(vector<int>& arr) {
-        // code here
-        int n=arr.size();
-        unordered_map<int,int>mp;
-        for(auto num:arr){
-            mp[num*num]++;
+         unordered_map<int, bool> mp;
+        for(int i: arr){
+            // mp[i*i]=1;
+            mp[i*i]=1;
         }
-        for(int i=0;i<n;i++){
-            for(int j=i+1;j<n;j++){
-                int a=arr[i]*arr[i],b=arr[j]*arr[j];
-                if(mp.find(a+b)!=mp.end()){
-                    return true;
-                }
+        for(int i=0; i<arr.size(); i++){
+            for(int j= i+1; j<arr.size(); j++){
+                if(mp.find(arr[i]*arr[i] + arr[j]*arr[j])!=mp.end())
+                return true;
             }
         }
         return false;
-        
+
     }
 };
