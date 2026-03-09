@@ -2,22 +2,27 @@ class Solution {
   public:
     string largestSwap(string &s) {
         // code here
-         int n = s.size();
-        int maxIndex = n-1;
-        int left = -1, right = -1;
-        for(int i = n-2; i >= 0; i--)
-        {
-            if(s[i] > s[maxIndex])
-                maxIndex = i;
-            else if(s[i] < s[maxIndex])
-            {
-                left = i;
-                right = maxIndex;
+          vector<pair<int,int>>vec(s.size());
+        for(int i = s.size()-1;i>=0;i--){
+            if(i == s.size()-1){
+                vec[i] = {s[i] - '0', i};
+                continue;
             }
-            
+            if(s[i]-'0' > vec[i+1].first){
+                vec[i] = {s[i] - '0', i};
+            }else{
+                vec[i] = vec[i+1];
+            }
         }
-        if(left != -1)
-            swap(s[left], s[right]);
+        for(int i = 0;i<s.size();i++){
+            if(s[i] - '0' < vec[i].first){
+                char temp1 = s[i];
+                char temp2 = s[vec[i].second];
+                s[i] = temp2;
+                s[vec[i].second] = temp1;
+                return s;
+            }
+        }
         return s;
     }
 };
