@@ -2,23 +2,19 @@ class Solution {
   public:
     int kBitFlips(vector<int>& arr, int k) {
         // code here
-        int n = arr.size();
-        int cnt = 0, flip = 0;
+         int n=arr.size();
         queue<int> q;
-    
-        for (int i = 0; i < n; i++) {
-            if (!q.empty() && q.front() == i) {
-                q.pop();
-                flip ^= 1;
-            }
-            if ((arr[i] ^ flip) == 0) { // bit is 0 considering flips
-                if (i + k > n) return -1;
-                cnt++;
-                flip ^= 1;
-                q.push(i + k);
- 
-            }
+        int operation=0;
+        for(int i=0;i<n;i++){
+           if(!q.empty() && i==q.front())q.pop();
+           int bit=arr[i];
+           if(!q.empty() && q.size()%2==1)bit^=1;//if odd size->change the bit
+           if(bit==0){
+               if(i+k>n)return -1;
+               operation++;
+               q.push(i+k);
+           }
         }
-        return cnt;
+        return operation;
     }
 };
