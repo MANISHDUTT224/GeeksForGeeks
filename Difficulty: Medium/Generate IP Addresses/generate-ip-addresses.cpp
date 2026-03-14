@@ -1,47 +1,32 @@
 class Solution {
   public:
-      bool isValid(string s){
-        //chec for the leading zero
-        if(s.length()>1 and s[0]=='0' and (s[1]!=0 or s[1]=='0')){
-            return false;
+       vector<string>ans;
+    bool isValid(string &str){
+        if(str.size()>1 && str[0]=='0')return false;
+        int val=stoi(str);
+        return val<256;
+    }
+    void dfs(string &s,int idx,int parts,string curr){
+        if(idx>=s.size() && parts==4){
+            curr.pop_back();
+            ans.push_back(curr);
+            return;
         }
-        if(s.length()<1){
-            return false;
-        }
-        if(s.length()>3){
-            return false;
-        }
-        int number= stoi(s);
-        if(number>=0 and number<=255){
-            return true;
-        }
-        return false;
+        if(parts>=4)return;
         
-    }
-    string generate_string(int  i, int j, int k, string &s){
-        string s1= s.substr(0, i+1);
-        string s2= s.substr(i+1, j-i);
-        string s3= s.substr(j+1, k-j);
-        string s4= s.substr(k+1, s.length() - k- 1);
-        if(isValid(s1) and isValid(s2) and isValid(s3) and isValid(s4)){
-            return s1 + "." + s2 + "." + s3 + "." + s4;
-        }
-        return "";
-    }
-    vector<string> generateIp(string s) {
-        // code here
-        vector<string> ans;
-        for(int i=0; i<s.length(); i++){
-            for(int j= i+1; j<s.length();j++){
-                for(int k= j+1; k<s.length(); k++){
-                    string gen_string= generate_string(i, j, k, s);
-                    if(gen_string.size()>=1){
-                        ans.push_back(gen_string);
-                    }
-                   
-                }
+        for(int len=1;len<=3;len++){
+            int j=idx+len;
+            if(j>s.size())break;
+            
+            string seg=s.substr(idx,len);
+            if(isValid(seg)){
+                dfs(s,j,parts+1,curr+seg+".");
             }
         }
+    }
+    vector<string> generateIp(string &s) {
+        // code here
+        dfs(s,0,0,"");
         return ans;
     }
 };
