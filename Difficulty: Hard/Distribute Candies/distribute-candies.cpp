@@ -14,21 +14,26 @@ public:
 
 class Solution {
   public:
-      virtual int fun(Node *root, int &ans){
-        if(!root)
-          return 0;
-        int l = fun(root->left, ans);  
-        int r = fun(root->right, ans);
-        
-        ans += (abs(l) + abs(r));
-        
-        return root->data + l + r - 1;
+      int moves = 0;
+
+    // Helper DFS function to balance candies
+    int dfs(Node* root) {
+        if (!root) return 0;
+
+        int left = dfs(root->left);   // candies to move from left subtree
+        int right = dfs(root->right); // candies to move from right subtree
+
+        // total moves = moves required in both subtrees
+        moves += abs(left) + abs(right);
+
+        // return the net balance of candies for this node
+        // (positive => extra candies, negative => needs candies)
+        return root->data + left + right - 1;
     }
-  
+
     int distCandy(Node* root) {
-        // code here
-        int ans = 0;
-        fun(root, ans);
-        return ans;
+        moves = 0;
+        dfs(root);
+        return moves;
     }
 };
