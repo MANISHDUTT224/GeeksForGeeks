@@ -1,26 +1,29 @@
 class Solution {
   public:
-    vector<int> bsts = {1, 1, 2, 5, 14, 42 };
     vector<int> countBSTs(vector<int>& arr) {
         // Code here
-        int n=arr.size();
-        vector<int> bstCount;
-        for(int i = 0; i<n; i++)
-        {
-            int l=0, g=0;
-            for(int j = 0;j<n;j++)
-            {
-                if(arr[i]<arr[j])
-                {
-                    g++;
-                }
-                else if(arr[i]>arr[j])
-                {
-                    l++;
-                }
+          int n = arr.size();
+        vector<int> ans;
+        vector<int> vec = arr;
+        sort(vec.begin(), vec.end());
+
+        // Precompute Catalan numbers up to n
+        vector<long long> cat(n + 1, 0);
+        cat[0] = cat[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            for (int j = 0; j < i; j++) {
+                cat[i] += cat[j] * cat[i - j - 1];
             }
-            bstCount.push_back(bsts[l]*bsts[g]);
         }
-        return bstCount;
+
+        for (int i = 0; i < n; i++) {
+            int idx = lower_bound(vec.begin(), vec.end(), arr[i]) - vec.begin();
+            int left = idx;              // elements smaller than arr[i]
+            int right = n - idx - 1;     // elements greater than arr[i]
+            
+            long long total = cat[left] * cat[right];
+            ans.push_back((int)total);
+        }
+        return ans;
     }
 };
