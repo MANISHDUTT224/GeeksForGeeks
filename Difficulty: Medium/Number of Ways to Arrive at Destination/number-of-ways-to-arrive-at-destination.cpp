@@ -1,45 +1,71 @@
 class Solution {
   public:
-    int countPaths(int V, vector<vector<int>>& edges) {
-        // code here
-          vector<pair<int,int>> adj[V];
-        priority_queue<pair<int,int>, 
-                       vector<pair<int,int>> ,
-                       greater<pair<int,int>>> pq;
-                       
-        vector<int> dist(V,INT_MAX), ways(V,0);
-        
-        for(int i = 0; i < edges.size(); i++)
-        {
-            adj[edges[i][0]].push_back({edges[i][1],edges[i][2]});
-            adj[edges[i][1]].push_back({edges[i][0],edges[i][2]});
-            
-        }
-        dist[0] = 0;
-        ways[0] = 1;
-        pq.push({0,0});
-        
-        while(pq.size())
-        {
-            int node = pq.top().second;
-            int node_dist = pq.top().first;
-            pq.pop();
-            for(auto it: adj[node])
-            {
-                int adjNode = it.first;
-                int adjDist = it.second;
-                if(node_dist + adjDist < dist[adjNode])
-                {
-                    dist[adjNode] =  node_dist + adjDist;
-                    ways[adjNode] =  ways[node];
-                    pq.push({dist[adjNode],adjNode});
+     int countPaths(int V, vector<vector<int>>& edges) {
+        vector<vector<pair<int,int>>> v(V);
+        map<pair<int,int>,int> mp;
+        map<pair<int,int>,int> mp1;
+        map<pair<int,int>,int> mp2;
+        for(int i = 0;i<edges.size();i++){
+            int a = edges[i][0];
+            int b = edges[i][1];
+            int c = edges[i][2];
+            mp1[{a,b}]++;
+            if(mp1[{a,b}] == 1){
+                   mp[{a,b}] = c;
+                   mp2[{a,b}] = 1;
+                   mp2[{b,a}] = 1;
+            }
+            else{
+                if(mp[{a,b}] == c){
+                    mp2[{a,b}]++;
+                    mp2[{b,a}]++;
                 }
-                else if(node_dist + adjDist == dist[adjNode])
-                {
-                    ways[adjNode] +=  ways[node];    
+                if(mp[{a,b}] > c){
+                   mp[{a,b}] = c;
+                   mp2[{a,b}] = 1;
+                   mp2[{b,a}] = 1;
                 }
             }
         }
-        return ways[V-1];
+        for(auto it : mp){
+            int a = it.first.first;
+            int b = it.first.second;
+            int c = it.second;
+            v[a].push_back({b,c});
+            v[b].push_back({a,c});
+        }
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
+        int count[201] = {0};
+        int count1[201] = {0};
+        count1[0] = 1;
+        for(int i = 0;i<=200;i++){
+            count[i] = INT_MAX;
+        }
+        int cnt = 0;
+        count[0] = 0;
+        pq.push({0,0});
+        while(!pq.empty()){
+            int a = pq.top().first;
+            int b = pq.top().second;
+            pq.pop();
+            if(count[b] < a){
+                continue;
+            }
+            vector<pair<int,int>> w = v[b];
+            for(int i = 0;i<w.size();i++){
+                int c = w[i].first;
+                int d = w[i].second;
+                    if(count[c] == a+d){
+                        count1[c] += (count1[b]*mp2[{b,c}]);
+                    }
+                    if(count[c] > a+d){
+                        count1[c] = count1[b]*mp2[{b,c}];
+                        count[c] = a+d;
+                        pq.push({a+d,c});
+                    }
+            }
+        }
+        return count1[V-1];
     }
+
 };
