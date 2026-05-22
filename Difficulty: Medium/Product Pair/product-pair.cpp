@@ -2,20 +2,21 @@ class Solution {
   public:
     bool isProduct(vector<int>& arr, long long target) {
         // code here
-          unordered_map<long long,long long>mpp;
-        for(int i=0;i<arr.size();i++){
-            if(arr[i]==0){
-                if(target == 0) return true;
-                continue;
+            unordered_map<int,int>ump;
+        
+        for(int i = 0; i< arr.size();i++){
+            if(ump[arr[i]])
+                return true;
+            
+            if(arr[i] == 0){
+                ump[INT_MIN] = 0;
             }
-            if(target%arr[i] == 0){
-                long long need = target/arr[i];
-                if(mpp.find(need) !=mpp.end()){
-                    return true;
-                }
+            else if(target % arr[i] == 0){
+                ump[target/arr[i]] = arr[i];
             }
-            mpp[arr[i]] = i;
         }
+        if(ump[INT_MIN]== target)
+            return true;
         return false;
     }
 };
