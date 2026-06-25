@@ -1,58 +1,49 @@
-using vi = vector<int>;
-using vb = vector<bool>;
- 
-using vvi = vector<vector<int>> ;
-using vvb = vector<vector<bool>> ;
-int n;
 class Solution {
-private:
-bool dfs (int r, int c, vvi& mat, vvi& ans, vvb& vis) {
-if (r == n - 1 && c == n - 1) {
-ans[r][c] = 1;
-return true;
-}
- 
-if (vis[r][c])
-return false;
- 
-if (mat[r][c] == 0)
-return false;
- 
-ans[r][c] = 1;
-for (int j = 1; j < mat[r][c] + 1; j++) {
-int nc = c + j;
-if (nc < n && ans[r][nc] == 0) {
-if (dfs (r, nc, mat, ans, vis))
-return true;
-}
- 
-int nr = r + j;
-if (nr < n && ans[nr][c] == 0) {
-if (dfs(nr, c, mat, ans, vis))
-return true;
-}
- 
-}
- 
-ans[r][c] = 0;
-vis[r][c] = true;
-return false;
-}
- 
-public:
-vvi shortestDist(vector<vector<int>> & mat) {
-// code here
-n = mat.size();
-if (n == 1)
-return {{1}};
- 
-vvi ans(n, vi(n, 0));
-vvb vis(n, vb(n, false));
- 
-if (dfs(0, 0, mat, ans, vis))
-return ans;
- 
-return {{-1}};
-}
+	public:
+	vector<vector<int>> dp;
+	
+	bool withInMatrix(int i, int j, vector<vector<int>> & mat) {
+		if (i >= mat.size() || j >= mat[0].size() || mat[i][j] == 0) {
+			return false;
+		}
+		
+		return true;
+	}
+	bool ratmaze(vector<vector<int>> & mat, vector<vector<int>> & ans, int i, int j) {
+		if (!withInMatrix(i, j, mat))
+			return false;
+		
+		if (i == mat.size() - 1 && j == mat[0].size() - 1) {
+			ans[i][j] = 1;
+			return true;
+		}
+		
+		if (dp[i][j] == 0)
+			return false;
+		
+		ans[i][j] = 1;
+		
+		for (int jump = 1; jump <= mat[i][j]; jump++) {
+			if (ratmaze(mat, ans, i, j + jump))
+				return true;
+			
+			if (ratmaze(mat, ans, i + jump, j))
+				return true;
+		}
+		
+		ans[i][j] = 0;
+		dp[i][j] = 0;
+		
+		return false;
+	}
+	
+	vector<vector<int>> shortestDist(vector<vector<int>> & mat) {
+		// code here
+		vector<vector<int>> ans(mat.size(), vector<int>(mat[0].size(), 0));
+		dp.assign(mat.size(), vector<int>(mat[0].size(), -1));
+		if (!ratmaze(mat, ans, 0, 0)) {
+			return {{-1}};
+		}
+		return ans;
+	}
 };
- 
